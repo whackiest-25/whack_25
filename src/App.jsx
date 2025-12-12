@@ -1,10 +1,10 @@
-import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import LandingPage from './LandingPage';
-import MissionSelection from './components/MissionSelection';
-import MissionControl from './components/MissionControl';
-import RegisterPage from './pages/RegisterPage';
-import { AuthProvider, useAuth } from './context/AuthContext';
-import { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
+import LandingPage from "./LandingPage";
+import MissionSelection from "./components/MissionSelection";
+import MissionControl from "./components/MissionControl";
+import RegisterPage from "./pages/RegisterPage";
+import { AuthProvider, useAuth } from "./context/AuthContext";
+import { useState } from "react";
 
 // Protected Route Wrapper
 const ProtectedRoute = ({ children }) => {
@@ -20,24 +20,24 @@ const ProtectedRoute = ({ children }) => {
 
 // Mission Handler Wrapper to manage state between Selection and Control
 const MissionApp = () => {
-  const [view, setView] = useState('selection'); // 'selection' | 'control'
+  const [view, setView] = useState("selection"); // 'selection' | 'control'
   const [activeMission, setActiveMission] = useState(null);
 
   const handleMissionStart = (mission) => {
     setActiveMission(mission);
-    setView('control');
+    setView("control");
   };
 
   const handleBack = () => {
-    setView('selection');
+    setView("selection");
     setActiveMission(null);
   };
 
-  if (view === 'control') {
+  if (view === "control") {
     return <MissionControl mission={activeMission} onBack={handleBack} />;
   }
 
-  return <MissionSelection onBack={() => { }} onMissionStart={handleMissionStart} />;
+  return <MissionSelection onBack={() => {}} onMissionStart={handleMissionStart} />;
 };
 
 function App() {

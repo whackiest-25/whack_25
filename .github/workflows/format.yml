@@ -1,0 +1,35 @@
+name: Prettier Check
+
+# When to run this workflow
+on:
+  # Run on pushes to master/main branches
+  push:
+    branches: [master, main]
+  # Run on all pull requests
+  pull_request:
+    branches: [master, main]
+
+jobs:
+  format:
+    name: Check Code Formatting
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Download the code from GitHub
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: Setup Node.js environment
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: npm ci
+
+      # Step 4: Check if code is properly formatted
+      - name: Check formatting
+        run: npm run format:check
