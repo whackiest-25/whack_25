@@ -75,10 +75,11 @@ const LevelCard = ({ level, isUnlocked, isCompleted, onClick }) => {
       className={`
                 relative w-full aspect-[4/3] border-4 p-6 flex flex-col items-center justify-center
                 transition-all duration-300
-                ${isUnlocked
-          ? "bg-gradient-to-br from-slate-900/90 to-slate-800/90 border-neonBlue hover:border-white hover:shadow-[0_0_30px_rgba(0,240,255,0.4)] cursor-pointer backdrop-blur-sm"
-          : "bg-slate-900/50 border-slate-700 cursor-not-allowed backdrop-blur-sm grayscale"
-        }
+                ${
+                  isUnlocked
+                    ? "bg-gradient-to-br from-slate-900/90 to-slate-800/90 border-neonBlue hover:border-white hover:shadow-[0_0_30px_rgba(0,240,255,0.4)] cursor-pointer backdrop-blur-sm"
+                    : "bg-slate-900/50 border-slate-700 cursor-not-allowed backdrop-blur-sm grayscale"
+                }
             `}
     >
       {/* Background Grid */}
@@ -113,10 +114,11 @@ const LevelCard = ({ level, isUnlocked, isCompleted, onClick }) => {
         <div
           className={`
                     text-[10px] font-pixel px-3 py-1 border-2
-                    ${isUnlocked
-              ? "bg-blue-900/50 border-blue-500 text-blue-300"
-              : "bg-slate-800/50 border-slate-600 text-slate-500"
-            }
+                    ${
+                      isUnlocked
+                        ? "bg-blue-900/50 border-blue-500 text-blue-300"
+                        : "bg-slate-800/50 border-slate-600 text-slate-500"
+                    }
                 `}
         >
           {level.difficulty}

@@ -90,21 +90,21 @@ const MapNode = ({ level, onClick, delay, isComplete, onViewSummary }) => {
         }}
       >
         {/* PIXEL CARD CONTAINER */}
-        <button
-          onClick={() => onClick(level)}
-          disabled={level.locked}
-          className="w-full"
-        >
+        <button onClick={() => onClick(level)} disabled={level.locked} className="w-full">
           <motion.div
-            whileHover={{ scale: !level.locked ? 1.05 : 1, filter: !level.locked ? "brightness(1.2)" : "none" }}
+            whileHover={{
+              scale: !level.locked ? 1.05 : 1,
+              filter: !level.locked ? "brightness(1.2)" : "none"
+            }}
             whileTap={{ scale: !level.locked ? 0.95 : 1 }}
             className={`
               w-64 h-80 bg-slate-900/90 border-4 relative overflow-hidden flex flex-col items-center justify-start pt-6 gap-6 p-4
-              ${level.locked
-                ? "border-gray-700 opacity-70 shadow-[0_0_20px_rgba(0,0,0,0.5)]"
-                : isComplete
-                  ? "border-green-500 box-glow-hover shadow-[0_0_40px_rgba(34,197,94,0.4)]"
-                  : "border-neonBlue box-glow-hover shadow-[0_0_40px_rgba(0,240,255,0.3)]"
+              ${
+                level.locked
+                  ? "border-gray-700 opacity-70 shadow-[0_0_20px_rgba(0,0,0,0.5)]"
+                  : isComplete
+                    ? "border-green-500 box-glow-hover shadow-[0_0_40px_rgba(34,197,94,0.4)]"
+                    : "border-neonBlue box-glow-hover shadow-[0_0_40px_rgba(0,240,255,0.3)]"
               }
               transition-all duration-300
             `}
@@ -134,9 +134,10 @@ const MapNode = ({ level, onClick, delay, isComplete, onViewSummary }) => {
             {/* Planet */}
             <div
               className={`w-36 h-36 rounded-full relative overflow-hidden border-4 shrink-0 shadow-2xl
-                ${level.locked
-                  ? "grayscale brightness-50 border-gray-600"
-                  : `border-white/20 ${level.shadow}`
+                ${
+                  level.locked
+                    ? "grayscale brightness-50 border-gray-600"
+                    : `border-white/20 ${level.shadow}`
                 } ${level.visual}`}
             >
               <div className="absolute inset-0 rounded-full shadow-[inset_-10px_-10px_20px_rgba(0,0,0,0.8),inset_5px_5px_10px_rgba(255,255,255,0.2)]"></div>
@@ -149,12 +150,13 @@ const MapNode = ({ level, onClick, delay, isComplete, onViewSummary }) => {
             {/* Card Content */}
             <div className="w-full text-center space-y-4 mt-auto pb-6 relative z-10">
               <div
-                className={`mx-auto px-3 py-2 text-[10px] md:text-xs font-pixel tracking-widest uppercase border-y-2 bg-black/80 backdrop-blur-md shadow-lg ${level.locked
-                  ? "border-gray-700 text-gray-500"
-                  : isComplete
-                    ? "border-green-500 text-green-400"
-                    : "border-neonBlue text-neonBlue"
-                  }`}
+                className={`mx-auto px-3 py-2 text-[10px] md:text-xs font-pixel tracking-widest uppercase border-y-2 bg-black/80 backdrop-blur-md shadow-lg ${
+                  level.locked
+                    ? "border-gray-700 text-gray-500"
+                    : isComplete
+                      ? "border-green-500 text-green-400"
+                      : "border-neonBlue text-neonBlue"
+                }`}
               >
                 {level.name}
               </div>
@@ -376,7 +378,9 @@ const MissionSummaryModal = ({ mission, onClose }) => {
             </div>
             <div>
               <h2 className="text-2xl font-pixel text-white">{mission.summary.title}</h2>
-              <p className="text-[10px] text-green-100 font-mono mt-1">MISSION COMPLETE • 100% SUCCESS RATE</p>
+              <p className="text-[10px] text-green-100 font-mono mt-1">
+                MISSION COMPLETE • 100% SUCCESS RATE
+              </p>
             </div>
           </div>
         </div>
@@ -391,7 +395,10 @@ const MissionSummaryModal = ({ mission, onClose }) => {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
               {mission.summary.achievements.map((achievement, idx) => (
-                <div key={idx} className="flex items-start gap-2 bg-green-950/30 border border-green-700/50 p-3 rounded">
+                <div
+                  key={idx}
+                  className="flex items-start gap-2 bg-green-950/30 border border-green-700/50 p-3 rounded"
+                >
                   <CheckCircle size={16} className="text-green-400 shrink-0 mt-0.5" />
                   <span className="text-xs text-slate-300">{achievement}</span>
                 </div>
@@ -421,8 +428,9 @@ const MissionSummaryModal = ({ mission, onClose }) => {
               <span className="text-purple-400 font-pixel text-xs">CONGRATULATIONS!</span>
               <br />
               <br />
-              You have successfully completed the Mangalyaan mission and made history. Your exceptional performance
-              demonstrates the skills needed for India's next great space adventures.
+              You have successfully completed the Mangalyaan mission and made history. Your
+              exceptional performance demonstrates the skills needed for India's next great space
+              adventures.
             </p>
           </div>
         </div>
@@ -615,10 +623,7 @@ const MissionSelection = ({ onBack, onMissionStart }) => {
           />
         )}
         {showSummary && (
-          <MissionSummaryModal
-            mission={showSummary}
-            onClose={() => setShowSummary(null)}
-          />
+          <MissionSummaryModal mission={showSummary} onClose={() => setShowSummary(null)} />
         )}
       </AnimatePresence>
     </div>
