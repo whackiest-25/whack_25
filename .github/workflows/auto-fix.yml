@@ -1,4 +1,4 @@
-name: Auto-fix Linting and Formatting
+name: Lint and Format Check
 
 on:
   pull_request:
@@ -6,22 +6,17 @@ on:
     types: [opened, synchronize, reopened]
 
 permissions:
-  contents: write
+  contents: read
   pull-requests: write
 
 jobs:
-  auto-fix:
-    name: Auto-fix Code Issues
+  check:
+    name: Check Code Quality
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          ref: ${{ github.event.pull_request.head.ref }}
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
-          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -32,44 +27,13 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Auto-fix formatting with Prettier
-        run: npm run format
+      - name: Run Prettier check
+        run: npm run format:check
         continue-on-error: true
 
-      - name: Auto-fix linting with ESLint
-        run: npm run lint:fix
+      - name: Run ESLint
+        run: npm run lint
         continue-on-error: true
 
-      - name: Check for changes
-        id: git-check
-        run: |
-          if git diff --quiet; then
-            echo "changes=false" >> $GITHUB_OUTPUT
-          else
-            echo "changes=true" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Commit fixes
-        if: steps.git-check.outputs.changes == 'true'
-        run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git add -A
-          git commit -m "🤖 Auto-fix: Apply linting and formatting fixes"
-          git push origin HEAD:${{ github.event.pull_request.head.ref }}
-
-      - name: Comment on PR
-        if: steps.git-check.outputs.changes == 'true'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: '🤖 **Auto-fix applied!**\n\nESLint and Prettier have automatically fixed code issues in this PR. Please review the changes.'
-            })
-
-      - name: No changes needed
-        if: steps.git-check.outputs.changes == 'false'
-        run: echo "✅ No linting or formatting issues found!"
+      - name: Report
+        run: echo "✅ Code quality checks complete. Please run 'npm run format' and 'npm run lint:fix' locally to fix any issues."
