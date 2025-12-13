@@ -1,51 +1,71 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import SciFiCard from "./ui/SciFiCard";
 import TechButton from "./ui/TechButton";
 import StarryBackground from "./ui/StarryBackground";
+import { CheckCircle, Award, Trophy, Star } from "lucide-react";
 
-const levels = [
-  {
+const MISSION_DATA = {
+  mangalyaan: {
     id: "mangalyaan",
     name: "MANGALYAAN",
     locked: false,
     type: "orbiter",
-    visual: "bg-[radial-gradient(circle_at_30%_30%,_#ef4444,_#7f1d1d)]", // Mars
+    visual: "bg-[radial-gradient(circle_at_30%_30%,_#ef4444,_#7f1d1d)]",
     shadow: "shadow-[0_0_40px_rgba(239,68,68,0.6)]",
-    texture: "https://www.transparenttextures.com/patterns/stardust.png"
+    texture: "https://www.transparenttextures.com/patterns/stardust.png",
+    summary: {
+      title: "Mars Orbiter Mission Complete",
+      achievements: [
+        "First Asian nation to reach Mars orbit",
+        "First nation to succeed on first attempt",
+        "Lowest cost Mars mission in history ($74M)",
+        "Detected methane in Martian atmosphere",
+        "Captured 1000s of high-resolution images",
+        "Mission lasted 8+ years (planned 6 months)"
+      ],
+      stats: [
+        { label: "Launch Date", value: "November 5, 2013" },
+        { label: "Mars Arrival", value: "September 24, 2014" },
+        { label: "Mission Cost", value: "$74 million" },
+        { label: "Total Levels", value: "8/8 Complete" }
+      ]
+    }
   },
-  {
+  chandrayaan: {
     id: "chandrayaan",
     name: "CHANDRAYAAN-3",
     locked: true,
     type: "lander",
-    visual: "bg-[radial-gradient(circle_at_30%_30%,_#e5e7eb,_#4b5563)]", // Moon
+    visual: "bg-[radial-gradient(circle_at_30%_30%,_#e5e7eb,_#4b5563)]",
     shadow: "shadow-[0_0_40px_rgba(255,255,255,0.4)]",
     texture: "https://www.transparenttextures.com/patterns/asfalt-dark.png"
   },
-  {
+  adityal1: {
     id: "adityal1",
     name: "ADITYA-L1",
     locked: true,
     type: "solar",
-    visual: "bg-[radial-gradient(circle_at_center,_#fcd34d,_#b45309,_#7c2d12)] animate-pulse-slow", // Sun
+    visual: "bg-[radial-gradient(circle_at_center,_#fcd34d,_#b45309,_#7c2d12)] animate-pulse-slow",
     shadow: "shadow-[0_0_60px_rgba(251,191,36,0.7)]",
     texture: "https://www.transparenttextures.com/patterns/arches.png"
   },
-  {
+  gaganyaan: {
     id: "gaganyaan",
     name: "GAGANYAAN",
     locked: true,
     type: "human",
-    visual: "bg-[radial-gradient(circle_at_30%_30%,_#3b82f6,_#1e3a8a)]", // Earth
+    visual: "bg-[radial-gradient(circle_at_30%_30%,_#3b82f6,_#1e3a8a)]",
     shadow: "shadow-[0_0_50px_rgba(59,130,246,0.6)]",
     texture: "https://www.transparenttextures.com/patterns/broken-noise.png"
   }
-];
+};
 
-const MapNode = ({ level, onClick, delay }) => {
+const levels = Object.values(MISSION_DATA);
+
+const MapNode = ({ level, onClick, delay, isComplete, onViewSummary }) => {
   return (
     <motion.div
       className="transform z-20"
@@ -57,9 +77,7 @@ const MapNode = ({ level, onClick, delay }) => {
       }}
       transition={{ delay: delay, type: "spring", stiffness: 100 }}
     >
-      <motion.button
-        onClick={() => onClick(level)}
-        disabled={level.locked}
+      <motion.div
         className="relative flex flex-col items-center focus:outline-none"
         animate={{
           y: [0, -15, 0]
@@ -68,76 +86,115 @@ const MapNode = ({ level, onClick, delay }) => {
           duration: 4,
           repeat: Infinity,
           ease: "easeInOut",
-          delay: delay * 2 // Stagger the floating animation
+          delay: delay * 2
         }}
-        whileHover={{ scale: 1.05, filter: "brightness(1.2)" }}
-        whileTap={{ scale: 0.95 }}
       >
-        {/* PIXEL CARD CONTAINER - Larger & Glowier */}
-        <div
-          className={`
-                    w-64 h-80 bg-slate-900/90 border-4 relative overflow-hidden flex flex-col items-center justify-start pt-6 gap-6 p-4
-                    ${
-                      level.locked
-                        ? "border-gray-700 opacity-70 shadow-[0_0_20px_rgba(0,0,0,0.5)]"
-                        : "border-neonBlue box-glow-hover shadow-[0_0_40px_rgba(0,240,255,0.3)]"
-                    }
-                    transition-all duration-300
-                `}
+        {/* PIXEL CARD CONTAINER */}
+        <button
+          onClick={() => onClick(level)}
+          disabled={level.locked}
+          className="w-full"
         >
-          {/* Corner Accents (Pixel Aesthetic) */}
-          <div className="absolute top-0 left-0 w-3 h-3 bg-white"></div>
-          <div className="absolute top-0 right-0 w-3 h-3 bg-white"></div>
-          <div className="absolute bottom-0 left-0 w-3 h-3 bg-white"></div>
-          <div className="absolute bottom-0 right-0 w-3 h-3 bg-white"></div>
-
-          {/* Lock Overlay */}
-          {level.locked && (
-            <div className="absolute inset-0 z-30 flex items-center justify-center bg-black/60 backdrop-blur-[2px]">
-              <div className="bg-black p-4 border-4 border-gray-600 shadow-2xl">
-                <span className="text-3xl opacity-80">🔒</span>
-              </div>
-            </div>
-          )}
-
-          {/* Planet Inside Card - Larger */}
-          <div
-            className={`w-36 h-36 rounded-full relative overflow-hidden border-4 shrink-0 shadow-2xl
-                        ${
-                          level.locked
-                            ? "grayscale brightness-50 border-gray-600"
-                            : `border-white/20 ${level.shadow}`
-                        } ${level.visual}`}
+          <motion.div
+            whileHover={{ scale: !level.locked ? 1.05 : 1, filter: !level.locked ? "brightness(1.2)" : "none" }}
+            whileTap={{ scale: !level.locked ? 0.95 : 1 }}
+            className={`
+              w-64 h-80 bg-slate-900/90 border-4 relative overflow-hidden flex flex-col items-center justify-start pt-6 gap-6 p-4
+              ${level.locked
+                ? "border-gray-700 opacity-70 shadow-[0_0_20px_rgba(0,0,0,0.5)]"
+                : isComplete
+                  ? "border-green-500 box-glow-hover shadow-[0_0_40px_rgba(34,197,94,0.4)]"
+                  : "border-neonBlue box-glow-hover shadow-[0_0_40px_rgba(0,240,255,0.3)]"
+              }
+              transition-all duration-300
+            `}
           >
-            <div className="absolute inset-0 rounded-full shadow-[inset_-10px_-10px_20px_rgba(0,0,0,0.8),inset_5px_5px_10px_rgba(255,255,255,0.2)]"></div>
-            <div
-              className="absolute inset-0 opacity-40 mix-blend-overlay"
-              style={{ backgroundImage: `url(${level.texture})` }}
-            ></div>
-          </div>
+            {/* Corner Accents */}
+            <div className="absolute top-0 left-0 w-3 h-3 bg-white"></div>
+            <div className="absolute top-0 right-0 w-3 h-3 bg-white"></div>
+            <div className="absolute bottom-0 left-0 w-3 h-3 bg-white"></div>
+            <div className="absolute bottom-0 right-0 w-3 h-3 bg-white"></div>
 
-          {/* Card Content - Better Typography */}
-          <div className="w-full text-center space-y-4 mt-auto pb-6 relative z-10">
-            <div
-              className={`mx-auto px-3 py-2 text-[10px] md:text-xs font-pixel tracking-widest uppercase border-y-2 bg-black/80 backdrop-blur-md shadow-lg ${level.locked ? "border-gray-700 text-gray-500" : "border-neonBlue text-neonBlue"}`}
-            >
-              {level.name}
-            </div>
-
-            {!level.locked && (
-              <div className="flex justify-center space-x-2 text-[10px] text-yellow-400">
-                <span className="drop-shadow-[0_0_5px_rgba(250,204,21,0.8)]">⭐</span>
-                <span className="drop-shadow-[0_0_5px_rgba(250,204,21,0.8)]">⭐</span>
-                <span className="opacity-30 text-white">☆</span>
+            {/* Completion Badge */}
+            {isComplete && (
+              <div className="absolute top-4 right-4 z-40 bg-green-500 rounded-full p-2 border-2 border-white shadow-[0_0_20px_rgba(34,197,94,0.6)] animate-pulse">
+                <CheckCircle size={24} className="text-white" />
               </div>
             )}
 
-            <div className="text-[9px] font-pixel text-slate-400 uppercase tracking-[0.2em]">
-              {level.type} CLASS
+            {/* Lock Overlay */}
+            {level.locked && (
+              <div className="absolute inset-0 z-30 flex items-center justify-center bg-black/60 backdrop-blur-[2px]">
+                <div className="bg-black p-4 border-4 border-gray-600 shadow-2xl">
+                  <span className="text-3xl opacity-80">🔒</span>
+                </div>
+              </div>
+            )}
+
+            {/* Planet */}
+            <div
+              className={`w-36 h-36 rounded-full relative overflow-hidden border-4 shrink-0 shadow-2xl
+                ${level.locked
+                  ? "grayscale brightness-50 border-gray-600"
+                  : `border-white/20 ${level.shadow}`
+                } ${level.visual}`}
+            >
+              <div className="absolute inset-0 rounded-full shadow-[inset_-10px_-10px_20px_rgba(0,0,0,0.8),inset_5px_5px_10px_rgba(255,255,255,0.2)]"></div>
+              <div
+                className="absolute inset-0 opacity-40 mix-blend-overlay"
+                style={{ backgroundImage: `url(${level.texture})` }}
+              ></div>
             </div>
-          </div>
-        </div>
-      </motion.button>
+
+            {/* Card Content */}
+            <div className="w-full text-center space-y-4 mt-auto pb-6 relative z-10">
+              <div
+                className={`mx-auto px-3 py-2 text-[10px] md:text-xs font-pixel tracking-widest uppercase border-y-2 bg-black/80 backdrop-blur-md shadow-lg ${level.locked
+                  ? "border-gray-700 text-gray-500"
+                  : isComplete
+                    ? "border-green-500 text-green-400"
+                    : "border-neonBlue text-neonBlue"
+                  }`}
+              >
+                {level.name}
+              </div>
+
+              {isComplete && (
+                <div className="flex justify-center items-center gap-1 text-yellow-400">
+                  <Trophy size={14} className="animate-bounce" />
+                  <span className="text-[10px] font-pixel">COMPLETE</span>
+                </div>
+              )}
+
+              {!level.locked && !isComplete && (
+                <div className="flex justify-center space-x-2 text-[10px] text-yellow-400">
+                  <span className="drop-shadow-[0_0_5px_rgba(250,204,21,0.8)]">⭐</span>
+                  <span className="drop-shadow-[0_0_5px_rgba(250,204,21,0.8)]">⭐</span>
+                  <span className="opacity-30 text-white">☆</span>
+                </div>
+              )}
+
+              <div className="text-[9px] font-pixel text-slate-400 uppercase tracking-[0.2em]">
+                {level.type} CLASS
+              </div>
+            </div>
+          </motion.div>
+        </button>
+
+        {/* Mission Summary Button (shown below card when complete) */}
+        {isComplete && onViewSummary && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onViewSummary(level);
+            }}
+            className="mt-4 px-6 py-3 bg-green-600 hover:bg-green-500 border-2 border-green-400 text-white font-pixel text-[10px] uppercase tracking-wider transition-all shadow-[0_0_20px_rgba(34,197,94,0.3)] hover:shadow-[0_0_30px_rgba(34,197,94,0.5)] flex items-center gap-2"
+          >
+            <Award size={14} />
+            VIEW MISSION SUMMARY
+          </button>
+        )}
+      </motion.div>
     </motion.div>
   );
 };
@@ -292,19 +349,130 @@ const ProfileModal = ({ user, profile, onClose }) => {
   );
 };
 
+const MissionSummaryModal = ({ mission, onClose }) => {
+  if (!mission?.summary) return null;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4"
+      onClick={onClose}
+    >
+      <motion.div
+        initial={{ scale: 0.9, y: 20 }}
+        animate={{ scale: 1, y: 0 }}
+        className="w-full max-w-2xl bg-[#0a0a16] border-4 border-green-500 rounded-xl overflow-hidden relative shadow-[0_0_50px_rgba(34,197,94,0.5)]"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="absolute inset-0 bg-grid-pattern opacity-10 pointer-events-none"></div>
+
+        {/* Header */}
+        <div className="bg-gradient-to-r from-green-600 to-emerald-600 p-6 relative">
+          <div className="flex items-center gap-4">
+            <div className="bg-white/20 p-3 rounded-full">
+              <Trophy className="text-white" size={32} />
+            </div>
+            <div>
+              <h2 className="text-2xl font-pixel text-white">{mission.summary.title}</h2>
+              <p className="text-[10px] text-green-100 font-mono mt-1">MISSION COMPLETE • 100% SUCCESS RATE</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Content */}
+        <div className="p-6 space-y-6 max-h-[60vh] overflow-y-auto custom-scroll">
+          {/* Achievements */}
+          <div>
+            <div className="flex items-center gap-2 mb-3">
+              <Star className="text-yellow-400" size={20} />
+              <h3 className="font-pixel text-sm text-yellow-400">KEY ACHIEVEMENTS</h3>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+              {mission.summary.achievements.map((achievement, idx) => (
+                <div key={idx} className="flex items-start gap-2 bg-green-950/30 border border-green-700/50 p-3 rounded">
+                  <CheckCircle size={16} className="text-green-400 shrink-0 mt-0.5" />
+                  <span className="text-xs text-slate-300">{achievement}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Stats */}
+          <div>
+            <div className="flex items-center gap-2 mb-3">
+              <Award className="text-blue-400" size={20} />
+              <h3 className="font-pixel text-sm text-blue-400">MISSION DATA</h3>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              {mission.summary.stats.map((stat, idx) => (
+                <div key={idx} className="bg-blue-950/30 border border-blue-700/50 p-3 rounded">
+                  <p className="text-[10px] text-blue-300 font-pixel mb-1">{stat.label}</p>
+                  <p className="text-sm text-white font-mono">{stat.value}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Closing Message */}
+          <div className="bg-gradient-to-r from-purple-950/50 to-blue-950/50 border-2 border-purple-500/30 p-4 rounded-lg text-center">
+            <p className="text-sm text-slate-300 leading-relaxed">
+              <span className="text-purple-400 font-pixel text-xs">CONGRATULATIONS!</span>
+              <br />
+              <br />
+              You have successfully completed the Mangalyaan mission and made history. Your exceptional performance
+              demonstrates the skills needed for India's next great space adventures.
+            </p>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="p-6 border-t border-white/10 flex justify-end gap-3">
+          <button
+            onClick={onClose}
+            className="px-6 py-3 bg-green-600 hover:bg-green-500 border-2 border-green-400 text-white font-pixel text-[10px] uppercase tracking-wider transition-all"
+          >
+            CLOSE
+          </button>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+};
+
 const MissionSelection = ({ onBack, onMissionStart }) => {
-  const { currentUser, userProfile, logout } = useAuth();
+  const { currentUser, userProfile, logout, getLevelProgress } = useAuth();
   const [selectedMission, setSelectedMission] = useState(null);
   const [showProfile, setShowProfile] = useState(false);
+  const [showSummary, setShowSummary] = useState(null);
+  const [missionProgress, setMissionProgress] = useState({});
 
   const navigate = useNavigate();
   const location = useLocation();
 
+  // Fetch mission progress
+  useEffect(() => {
+    const fetchProgress = async () => {
+      if (!currentUser) return;
+
+      const mangalyaanProgress = await getLevelProgress("mangalyaan");
+      const chandrayaanProgress = await getLevelProgress("chandrayaan");
+
+      setMissionProgress({
+        mangalyaan: mangalyaanProgress,
+        chandrayaan: chandrayaanProgress
+      });
+    };
+
+    fetchProgress();
+  }, [currentUser, getLevelProgress]);
+
   // Check for auto-show profile from navigation state
-  React.useEffect(() => {
+  useEffect(() => {
     if (location.state?.showProfile) {
       setShowProfile(true);
-      // Clear state so it doesn't reopen on refresh (optional, but good practice)
+      // Clear state so it doesn't reopen on refresh
       navigate(location.pathname, { replace: true, state: {} });
     }
   }, [location, navigate]);
@@ -317,12 +485,25 @@ const MissionSelection = ({ onBack, onMissionStart }) => {
 
   const handleLogout = async () => {
     try {
-      // Navigate to home immediately to avoid ProtectedRoute redirecting to /register
       navigate("/", { replace: true });
       await logout();
     } catch (error) {
       console.error("Failed to log out", error);
     }
+  };
+
+  // Determine which missions are complete and unlocked
+  const getMissionStatus = (missionId) => {
+    const progress = missionProgress[missionId];
+    const isComplete = progress?.missionComplete || false;
+    let isLocked = MISSION_DATA[missionId].locked;
+
+    // Unlock Chandrayaan if Mangalyaan is complete
+    if (missionId === "chandrayaan" && missionProgress.mangalyaan?.missionComplete) {
+      isLocked = false;
+    }
+
+    return { isComplete, isLocked };
   };
 
   return (
@@ -331,11 +512,15 @@ const MissionSelection = ({ onBack, onMissionStart }) => {
 
       {/* Inject Pixel Font */}
       <style>{`
-                @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-                .font-pixel { font-family: 'Press Start 2P', cursive; }
-            `}</style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        .font-pixel { font-family: 'Press Start 2P', cursive; }
+        .custom-scroll::-webkit-scrollbar { width: 8px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #1e293b; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
+        .custom-scroll::-webkit-scrollbar-thumb:hover { background: #64748b; }
+      `}</style>
 
-      {/* Header - Made fully transparent without borders */}
+      {/* Header */}
       <div className="relative z-30 px-8 py-8 flex justify-between items-start">
         <div className="flex items-center space-x-4">
           <button
@@ -376,24 +561,33 @@ const MissionSelection = ({ onBack, onMissionStart }) => {
         </TechButton>
       </div>
 
-      {/* Map Area - Centered & Clean - TALLER */}
+      {/* Map Area */}
       <div className="flex-1 relative w-full h-full max-w-7xl mx-auto z-10 flex flex-col items-center justify-center p-8">
-        {/* Cards Container */}
         <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12 relative z-20">
-          {levels.map((level, index) => (
-            <div key={level.id} className="relative group">
-              {/* Horizontal Connector Line (except for last item) */}
-              {index < levels.length - 1 && (
-                <div className="hidden md:block absolute top-1/2 -right-12 w-12 h-1 bg-white/20 z-0"></div>
-              )}
+          {levels.map((level, index) => {
+            const { isComplete, isLocked } = getMissionStatus(level.id);
+            const levelWithStatus = { ...level, locked: isLocked };
 
-              <MapNode level={level} onClick={setSelectedMission} delay={index * 0.1} />
-            </div>
-          ))}
+            return (
+              <div key={level.id} className="relative group">
+                {index < levels.length - 1 && (
+                  <div className="hidden md:block absolute top-1/2 -right-12 w-12 h-1 bg-white/20 z-0"></div>
+                )}
+
+                <MapNode
+                  level={levelWithStatus}
+                  onClick={setSelectedMission}
+                  delay={index * 0.1}
+                  isComplete={isComplete}
+                  onViewSummary={setShowSummary}
+                />
+              </div>
+            );
+          })}
         </div>
       </div>
 
-      {/* Mission Briefing Modal */}
+      {/* Modals */}
       <AnimatePresence>
         {selectedMission && (
           <MissionBriefing
@@ -407,6 +601,12 @@ const MissionSelection = ({ onBack, onMissionStart }) => {
             user={currentUser}
             profile={userProfile}
             onClose={() => setShowProfile(false)}
+          />
+        )}
+        {showSummary && (
+          <MissionSummaryModal
+            mission={showSummary}
+            onClose={() => setShowSummary(null)}
           />
         )}
       </AnimatePresence>

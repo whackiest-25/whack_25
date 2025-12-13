@@ -59,14 +59,25 @@ export function AuthProvider({ children }) {
       const progressRef = doc(db, "users", currentUser.uid, "progress", missionId);
       const currentProgress = await getLevelProgress(missionId);
       const unlockedLevels = currentProgress.unlockedLevels || [1];
+      const completedLevels = currentProgress.completedLevels || [];
 
-      // Unlock next level if not already unlocked
-      if (completedLevel < 4 && !unlockedLevels.includes(completedLevel + 1)) {
+      // Add to completed levels if not already there
+      if (!completedLevels.includes(completedLevel)) {
+        completedLevels.push(completedLevel);
+      }
+
+      // Unlock next level if not already unlocked (support up to 8 levels)
+      if (completedLevel < 8 && !unlockedLevels.includes(completedLevel + 1)) {
         unlockedLevels.push(completedLevel + 1);
       }
 
+      // Check if mission is complete (all 8 levels done)
+      const missionComplete = completedLevels.length >= 8;
+
       await setDoc(progressRef, {
         unlockedLevels,
+        completedLevels,
+        missionComplete,
         lastPlayed: new Date().toISOString()
       });
     } catch (error) {
