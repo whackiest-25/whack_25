@@ -3,10 +3,10 @@
 function  messyFunction( a,b ){
 var unused_variable = "I am never used";
     const x=10
-  const y = 20;;
+  const y = 20;
 
       if(x==10){
-    return a+b
+return a+b
       }
 }
 
