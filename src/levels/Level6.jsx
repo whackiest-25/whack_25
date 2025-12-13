@@ -88,7 +88,7 @@ const MRD_CONTENT = {
   success: {
     title: "MISSION ACCOMPLISHED",
     mission_impact:
-      "Mars Orbit Insertion (MOI) Successful! The Mangalyaan probe has entered a stable orbit around the Red Planet. History is made.",
+      "Mars Transfer Complete! The Mangalyaan probe has successfully navigated the 300-day journey to Mars. All systems checks passed. You have successfully navigated from launch to orbit. The scientific mission can now begin.",
     details: [
       {
         topic: "FLIGHT DATA",
@@ -875,8 +875,8 @@ export default function Level6MarsTransfer({ onBack, onNextLevel }) {
         <Modal
           title={MRD_CONTENT.success.title}
           variant="success"
-          onClose={onBack}
-          buttonText="RETURN TO MENU"
+          onClose={onNextLevel}
+          buttonText="NEXT LEVEL"
           onSecondary={resetLevel}
           secondaryButtonText="REPLAY LEVEL"
         >
