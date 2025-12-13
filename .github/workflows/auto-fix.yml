@@ -11,6 +11,7 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  actions: write
 
 jobs:
   auto-fix:
@@ -18,14 +19,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Download the code from GitHub
+      # Step 1: Download the code from GitHub with proper token
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.ref }}
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
           token: ${{ secrets.GITHUB_TOKEN }}
+          persist-credentials: true
 
       # Step 2: Setup Node.js environment
       - name: Setup Node.js
@@ -59,14 +60,14 @@ jobs:
           fi
 
       # Step 7: Commit and push changes if any
-      - name: Commit fixes
+      - name: Commit and push fixes
         if: steps.git-check.outputs.changes == 'true'
         run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add -A
           git commit -m "🤖 Auto-fix: Apply linting and formatting fixes"
-          git push origin HEAD:${{ github.event.pull_request.head.ref }}
+          git push
 
       # Step 8: Comment on PR if fixes were applied
       - name: Comment on PR
