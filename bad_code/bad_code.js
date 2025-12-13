@@ -9,5 +9,5 @@ var unused_variable = "I am never used";
 return a+b
       }
 }
-
+;
 var result = messyFunction( 5,10 );;
