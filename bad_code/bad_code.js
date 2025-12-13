@@ -10,4 +10,4 @@ return a+b
       }
 }
 
-var result = messyFunction( 5,10 )
+var result = messyFunction( 5,10 );;
