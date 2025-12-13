@@ -191,8 +191,8 @@ Through **8 challenging levels**, players experience the real physics, engineeri
 - **Firebase Hosting** - Static asset hosting
 
 ### Deployment
-- **Vercel** - Frontend hosting (https://your-app.vercel.app)
-- **Render** - Backend API hosting (https://your-backend.onrender.com)
+- **Vercel**
+- **Render** 
 - **GitHub Actions** - CI/CD workflows
 
 ### Development Tools
@@ -343,7 +343,7 @@ npm start
 
 ### Getting Started
 
-1. **Visit**: [Live Demo URL]
+1. **Visit**: [https://whack25deploy.vercel.app/]
 2. **Sign In**: Choose Google or Email authentication
 3. **Select Mission**: Start with Mangalyaan
 4. **Read MRD**: Study the mission briefing
