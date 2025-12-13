@@ -5,6 +5,8 @@ import Level3 from "../levels/Level3";
 import Level4 from "../levels/Level4";
 import Level5 from "../levels/Level5";
 import Level6 from "../levels/Level6";
+import Level7 from "../levels/Level7";
+import Level8 from "../levels/Level8";
 import LevelSelection from "./LevelSelection";
 import { useAuth } from "../context/AuthContext";
 
@@ -17,11 +19,11 @@ const MissionControl = ({ mission, onBack }) => {
     await saveLevelProgress(mission?.id || "mangalyaan", levelId);
 
     // Advance to next level (if not the last level)
-    if (levelId < 6) {
+    if (levelId < 8) {
       setSelectedLevel(levelId + 1);
     } else {
-      // Last level - return to level selection
-      setSelectedLevel(null);
+      // Last level - mission complete! Return to mission screen
+      onBack();
     }
   };
 
@@ -69,6 +71,16 @@ const MissionControl = ({ mission, onBack }) => {
   if (selectedLevel === 6) {
     return (
       <Level6 onNextLevel={() => handleLevelComplete(6)} onBack={handleBackToLevelSelection} />
+    );
+  }
+  if (selectedLevel === 7) {
+    return (
+      <Level7 onNextLevel={() => handleLevelComplete(7)} onBack={handleBackToLevelSelection} />
+    );
+  }
+  if (selectedLevel === 8) {
+    return (
+      <Level8 onNextLevel={() => handleLevelComplete(8)} onBack={handleBackToLevelSelection} />
     );
   }
 
