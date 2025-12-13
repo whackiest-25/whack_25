@@ -1,4 +1,4 @@
-# 🚀 ISRO Mission Simulator - Gyanyaan 1.0
+<img width="1911" height="903" alt="image" src="https://github.com/user-attachments/assets/89ea36a2-8b0a-4815-b200-644a04700b90" /># 🚀 ISRO Mission Simulator - Gyanyaan 1.0
 
 <div align="center">
 
@@ -28,7 +28,7 @@
 - [Special Features](#-special-features)
 - [Screenshots](#-screenshots)
 - [Team](#-team)
-- [License](#-license)
+
 
 ---
 
@@ -398,41 +398,39 @@ npm start
 ## 📸 Screenshots
 
 ### Landing Page
-*Dynamic 3D planet with smooth color transitions*
+<img width="1911" height="903" alt="image" src="https://github.com/user-attachments/assets/e17674d3-93a6-4b2d-aba0-bc3b6fbedd78" />
+
 
 ### Mission Selection
-*Retro pixel-art mission cards with completion status*
+<img width="1905" height="910" alt="image" src="https://github.com/user-attachments/assets/5e10aa95-3b12-4d2d-a3eb-f49aec886e80" />
+
 
 ### Level Gameplay
-*Authentic mission control interface with gauges and controls*
+<img width="1806" height="906" alt="image" src="https://github.com/user-attachments/assets/e5cf8376-9d14-43fa-9ee6-f15fc22b50b5" />
+
 
 ### Mission Complete
-*Detailed summary with achievements and statistics*
+<img width="861" height="780" alt="image" src="https://github.com/user-attachments/assets/e19eb08d-5e12-460f-a2a4-ed992515c50a" />
+
 
 ### Chaos Mode
-*Glitchy, retro effects for entertainment*
+<img width="1421" height="900" alt="image" src="https://github.com/user-attachments/assets/a4af284c-b4ca-43af-aeac-253647ef20dd" />
+
 
 ---
 
 ## 👥 Team
 
-**Project Lead & Developer**
-- Name: [Your Name]
-- Role: Full-Stack Development, Game Design, UI/UX
-- GitHub: [@nikhil2004-blip](https://github.com/nikhil2004-blip)
+**team memmbers **
+NIKHIL KUMAR YADAV
+BHARGAV BHOJAK 
+DHRUV AGARWAL
+MANJIT MISHRA
 
-**Technologies Used**
-- Frontend: React, Three.js, Framer Motion
-- Backend: Node.js, Express, Firebase
-- Deployment: Vercel, Render
 
 ---
 
-## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
 
 ## 🙏 Acknowledgments
 
@@ -447,8 +445,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 For questions, feedback, or collaboration:
 - **GitHub**: [nikhil2004-blip](https://github.com/nikhil2004-blip)
-- **Email**: [Your Email]
-- **Demo**: [Live URL]
+- 
+- **Demo**: [[Live URL]](https://whack25deploy.vercel.app/)
 
 ---
 
