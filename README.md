@@ -6,7 +6,7 @@
 ![React](https://img.shields.io/badge/React-18.3-61DAFB?style=for-the-badge&logo=react)
 ![Vite](https://img.shields.io/badge/Vite-5.4-646CFF?style=for-the-badge&logo=vite)
 ![Firebase](https://img.shields.io/badge/Firebase-10.x-FFCA28?style=for-the-badge&logo=firebase)
-![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
+
 
 **An immersive, educational space mission simulator bringing India's Mars Orbiter Mission (Mangalyaan) to life through interactive gameplay.**
 
