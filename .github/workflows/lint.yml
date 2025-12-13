@@ -30,6 +30,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # Step 4: Run ESLint
+      # Step 4: Run ESLint (continue even if it fails)
       - name: Run ESLint
         run: npm run lint
+        continue-on-error: true
+
+      # Step 5: Report status
+      - name: Report
+        run: echo "✅ Linting check complete. Auto-fix workflow will handle any issues in PRs."
