@@ -10,7 +10,7 @@
 
 **An immersive, educational space mission simulator bringing India's Mars Orbiter Mission (Mangalyaan) to life through interactive gameplay.**
 
-[🎮 Live Demo](#) | [📖 Documentation](#features) | [🎥 Video Demo](#)
+[🎮 Live Demo](https://whack25deploy.vercel.app/) | [📖 Documentation](#features) | [🎥 Video Demo]()
 
 </div>
 
